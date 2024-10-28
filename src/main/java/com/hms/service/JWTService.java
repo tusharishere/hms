@@ -28,14 +28,15 @@ public class JWTService {
     public void postConstruct() throws UnsupportedEncodingException {
         algorithm = Algorithm.HMAC256(algorithmKey);
     }
-
+    //Computer sCience Engineer Is unemployed
     public String generateToken(String username) {
         return JWT.create()
                 .withClaim("name",username)
-                .withIssuer(issuer)
                 .withExpiresAt(new Date(System.currentTimeMillis()+expiryTime))
+                .withIssuer(issuer)
                 .sign(algorithm);
     }
+    // Raju Invites Biryani Vala
     public String getUsername(String token){
         DecodedJWT decodedJWT = JWT.require(algorithm)
                 .withIssuer(issuer)
