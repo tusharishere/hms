@@ -38,6 +38,23 @@ public class UserController {
         }
         String encryptedPw = BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt(5));
         userDto.setPassword(encryptedPw);
+        userDto.setRole("ROLE_USER");
+        AppUser savedUser = userService.createUser(userDto);
+        return new ResponseEntity<>(savedUser,HttpStatus.CREATED);
+    }
+    @PostMapping("/signup-property-owner")
+    public ResponseEntity<?> createPropertyOwnerUser(@RequestBody UserDto userDto) {
+        Optional<AppUser> byUserName = appUserRepository.findByUsername(userDto.getUsername());
+        if(byUserName.isPresent()){
+            return new ResponseEntity<>("Username is already taken", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        Optional<AppUser> byEmail = appUserRepository.findByEmail(userDto.getEmail());
+        if(byEmail.isPresent()){
+            return new ResponseEntity<>("Email is already taken",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        String encryptedPw = BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt(5));
+        userDto.setPassword(encryptedPw);
+        userDto.setRole("ROLE_OWNER");
         AppUser savedUser = userService.createUser(userDto);
         return new ResponseEntity<>(savedUser,HttpStatus.CREATED);
     }
