@@ -4,7 +4,6 @@ import com.hms.entity.Country;
 import com.hms.payload.CountryDto;
 import com.hms.repository.CountryRepository;
 import com.hms.service.CountryService;
-import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

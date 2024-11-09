@@ -9,10 +9,10 @@ import lombok.Setter;
 @Setter
 public class PropertyDto {
     private String propertyName;
-    private Integer no_of_guests;
-    private Integer no_of_rooms;
+    private Integer no_of_guest;
+    private Integer no_of_bedrooms;
     private Integer no_of_bathrooms;
     private Integer no_of_beds;
-    private City city;
     private Country country;
+    private City city;
 }
