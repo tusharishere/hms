@@ -29,11 +29,12 @@ public class Property {
     @Column(name = "no_of_beds", nullable = false)
     private Integer no_of_beds;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "country_id")
     private Country country;
 
-    @ManyToOne
+
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "city_id")
     private City city;
 

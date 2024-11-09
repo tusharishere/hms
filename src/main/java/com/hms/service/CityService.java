@@ -4,6 +4,7 @@ import com.hms.entity.City;
 import com.hms.exception.ResourceNotFoundException;
 import com.hms.payload.CityDto;
 import com.hms.repository.CityRepository;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +29,36 @@ public class CityService {
             return cityDto;
     }
 
+
     public List<CityDto> findAllCities() {
         List<City> cities = cityRepository.findAll();
         List<CityDto> cityDtos = cities.stream().map(r->mapToDto(r)).collect(Collectors.toList());
         return cityDtos;
     }
+
+
+    public City update(Long id, City city) {
+        City citi = cityRepository.findById(id).get();
+        citi.setCityName(city.getCityName());
+        City save = cityRepository.save(citi);
+        return save;
+    }
+
+
+    public CityDto getCityById(Long id) {
+        City city = cityRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("Record not found"));
+        CityDto cityDto = mapToDto(city);
+        return cityDto;
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        City city = cityRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("Record not found"));
+        cityRepository.deleteById(id);
+    }
+
 
     private CityDto mapToDto(City city) {
         CityDto cityDto = modelMapper.map(city,CityDto.class);
@@ -44,17 +70,4 @@ public class CityService {
         return city;
     }
 
-
-    public City update(Long id, City city) {
-        City citi = cityRepository.findById(id).get();
-        citi.setCityName(city.getCityName());
-        City save = cityRepository.save(citi);
-        return save;
-    }
-
-    public CityDto getCityById(Long id) {
-        City city = cityRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Record not found"));
-        CityDto cityDto = mapToDto(city);
-        return cityDto;
-    }
 }

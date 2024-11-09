@@ -4,6 +4,7 @@ import com.hms.entity.City;
 import com.hms.payload.CityDto;
 import com.hms.repository.CityRepository;
 import com.hms.service.CityService;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,8 @@ public class CityController {
         List<CityDto> cityDtos = cityService.findAllCities();
         return new ResponseEntity<>(cityDtos,HttpStatus.OK);
     }
+
+
     @PutMapping("/{id}")
     public ResponseEntity<City> updateCity(
             @PathVariable Long id,
@@ -48,6 +51,16 @@ public class CityController {
         City citi = cityService.update(id,city);
         return new ResponseEntity<>(citi,HttpStatus.OK);
     }
+
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteCity(
+            @RequestParam Long id
+    ){
+        cityService.delete(id);
+        return new ResponseEntity<>("Deleted",HttpStatus.OK);
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<CityDto> getCityById(
