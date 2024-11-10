@@ -10,6 +10,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "app_user")
 public class AppUser {
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
