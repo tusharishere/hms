@@ -46,8 +46,8 @@ public class PropertyService {
         return save;
     }
 
-    public PropertyDto getPropertyById(Long id) {
-        Property property = propertyRepository.findById(id).orElseThrow(
+    public PropertyDto getPropertyById(Long propertyId) {
+        Property property = propertyRepository.findById(propertyId).orElseThrow(
                 ()->new ResourceNotFoundException("Record not found")
         );
         PropertyDto propertyDto = mapToDto(property);
@@ -59,12 +59,12 @@ public class PropertyService {
         return properties;
     }
 
-    private PropertyDto mapToDto(Property save) {
+    public PropertyDto mapToDto(Property save) {
         PropertyDto propertyDto = modelMapper.map(save, PropertyDto.class);
         return propertyDto;
     }
 
-    private Property mapToEntity(PropertyDto dto) {
+    public Property mapToEntity(PropertyDto dto) {
         Property property = modelMapper.map(dto, Property.class);
         return property;
     }
