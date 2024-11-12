@@ -17,7 +17,7 @@ A Hotel Management System built using Java Spring Boot.
 - **Spring Security**: For securing endpoints with JWT authentication and role-based access control.
 - **Hibernate/JPA**: For ORM and managing database entities.
 - **MySQL**: For storing application data.
-- **Amazon S3 (or any other cloud service)**: For storing property images (via `BucketService`).
+- **Amazon S3 **: For storing property images.
 - **Lombok**: For reducing boilerplate code.
 
 ## Installation
