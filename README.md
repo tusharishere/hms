@@ -20,7 +20,7 @@ A Hotel Management System built using Java Spring Boot.
 - **Amazon S3**: For storing property images.
 - **Lombok**: For reducing boilerplate code.
 
-  ## ER Diagram
+## ER Diagram
 
 
 Here is the ER Diagram for the project:
