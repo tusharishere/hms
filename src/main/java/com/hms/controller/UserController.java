@@ -40,6 +40,7 @@ public class UserController {
         AppUser savedUser = userService.createUser(userDto);
         return new ResponseEntity<>(savedUser,HttpStatus.CREATED);
     }
+
     @PostMapping("/signup-property-owner")
     public ResponseEntity<?> createPropertyOwnerUser(@RequestBody UserDto userDto) {
         Optional<AppUser> byUserName = appUserRepository.findByUsername(userDto.getUsername());
@@ -73,9 +74,9 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<AppUser> updateUser(
             @PathVariable Long id,
-            @RequestBody AppUser appUser) {
-        AppUser user = userService.updateUser(id, appUser);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+            @RequestBody UserDto userDto) {
+        AppUser updatedUser = userService.updateUser(id, userDto);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

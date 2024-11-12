@@ -5,6 +5,7 @@ import com.hms.exception.ResourceNotFoundException;
 import com.hms.payload.UserDto;
 import com.hms.repository.AppUserRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,15 +42,18 @@ public class UserService {
         appUserRepository.deleteById(id);
     }
 
-    public AppUser updateUser(Long id, AppUser appUser) {
+    public AppUser updateUser(Long id, UserDto userDto) {
         AppUser user = appUserRepository.findById(id).orElseThrow(
-                ()-> new ResourceNotFoundException("Record not found with this id"));
-        user.setUsername(appUser.getUsername());
-        user.setEmail(appUser.getEmail());
-        user.setEmail(appUser.getEmail());
-        user.setPassword(appUser.getPassword());
-        AppUser save = appUserRepository.save(user);
-        return save;
+                ()-> new ResourceNotFoundException("Record not found with this id")
+        );
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
+        user.setEmail(userDto.getEmail());
+
+        String encryptedPw = BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt(5));
+        user.setPassword(encryptedPw);
+        AppUser updatedUser = appUserRepository.save(user);
+        return updatedUser;
     }
 
     public UserDto findUserById(Long id) {
