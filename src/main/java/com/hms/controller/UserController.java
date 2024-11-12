@@ -7,11 +7,9 @@ import com.hms.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -57,5 +55,33 @@ public class UserController {
         userDto.setRole("ROLE_OWNER");
         AppUser savedUser = userService.createUser(userDto);
         return new ResponseEntity<>(savedUser,HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserDto>> getUsers() {
+        List<UserDto> appUserDtos = userService.findAllUsers();
+        return new ResponseEntity<>(appUserDtos, HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteUser(
+            @RequestParam Long id) {
+        userService.deleteUser(id);
+        return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AppUser> updateUser(
+            @PathVariable Long id,
+            @RequestBody AppUser appUser) {
+        AppUser user = userService.updateUser(id, appUser);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> getUserById(
+            @PathVariable Long id) {
+        UserDto appUserDto = userService.findUserById(id);
+        return new ResponseEntity<>(appUserDto,HttpStatus.OK);
     }
 }
