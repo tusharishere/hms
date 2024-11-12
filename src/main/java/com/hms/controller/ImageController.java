@@ -3,7 +3,6 @@ package com.hms.controller;
 import com.hms.entity.AppUser;
 import com.hms.entity.Images;
 import com.hms.entity.Property;
-import com.hms.exception.ResourceNotFoundException;
 import com.hms.payload.PropertyDto;
 import com.hms.repository.ImagesRepository;
 import com.hms.repository.PropertyRepository;

@@ -61,7 +61,7 @@ public class PropertyController {
     public ResponseEntity<String> deleteProperty(
             @RequestParam Long id
     ){
-        propertyService.delete(id);
+        propertyService.deleteProperty(id);
         return new ResponseEntity<>("Deleted",HttpStatus.OK);
     }
 
@@ -70,7 +70,7 @@ public class PropertyController {
             @PathVariable Long id,
             @RequestBody Property property
     ){
-        Property prop = propertyService.update(id,property);
+        Property prop = propertyService.updateProperty(id,property);
         return new ResponseEntity<>(prop,HttpStatus.OK);
     }
 

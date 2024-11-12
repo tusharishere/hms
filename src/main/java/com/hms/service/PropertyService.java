@@ -35,12 +35,14 @@ public class PropertyService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void deleteProperty(Long id) {
         propertyRepository.deleteById(id);
     }
 
-    public Property update(Long id, Property property) {
-        Property prop = propertyRepository.findById(id).get();
+    public Property updateProperty(Long id, Property property) {
+        Property prop = propertyRepository.findById(id).orElseThrow(
+                ()->new ResourceNotFoundException("Record not found")
+        );
         prop.setPropertyName(property.getPropertyName());
         Property save = propertyRepository.save(prop);
         return save;

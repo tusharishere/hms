@@ -37,11 +37,12 @@ public class CityService {
     }
 
 
-    public City update(Long id, City city) {
-        City citi = cityRepository.findById(id).get();
-        citi.setCityName(city.getCityName());
-        City save = cityRepository.save(citi);
-        return save;
+    public CityDto updateCity(Long id, CityDto cityDto) {
+        City city = cityRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Record not found"));
+        city.setCityName(cityDto.getCityName());
+        City updatedCity = cityRepository.save(city);
+        mapToDto(updatedCity);
+        return mapToDto(updatedCity);
     }
 
 

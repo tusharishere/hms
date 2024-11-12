@@ -3,6 +3,7 @@ package com.hms.controller;
 import com.hms.entity.AppUser;
 import com.hms.entity.Property;
 import com.hms.entity.Review;
+import com.hms.exception.ResourceNotFoundException;
 import com.hms.payload.ReviewDto;
 import com.hms.repository.PropertyRepository;
 import com.hms.repository.ReviewRepository;
@@ -33,7 +34,7 @@ public class ReviewController {
             @RequestBody ReviewDto dto,
             @RequestParam long propertyId,
             @AuthenticationPrincipal AppUser user){
-        Property property = propertyRepository.findById(propertyId).get();
+        Property property = propertyRepository.findById(propertyId).orElseThrow(()->new ResourceNotFoundException("Record not found"));
         if(reviewRepository.existsByAppUserAndProperty(user,property)){
             return new ResponseEntity<>("User has already given the review", HttpStatus.INTERNAL_SERVER_ERROR);
         }

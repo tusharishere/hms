@@ -4,7 +4,6 @@ import com.hms.entity.City;
 import com.hms.payload.CityDto;
 import com.hms.repository.CityRepository;
 import com.hms.service.CityService;
-import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,12 +43,12 @@ public class CityController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<City> updateCity(
+    public ResponseEntity<CityDto> updateCity(
             @PathVariable Long id,
-            @RequestBody City city
+            @RequestBody CityDto cityDto
     ){
-        City citi = cityService.update(id,city);
-        return new ResponseEntity<>(citi,HttpStatus.OK);
+        cityService.updateCity(id, cityDto)
+        return new ResponseEntity<>(updatedCity,HttpStatus.OK);
     }
 
 
