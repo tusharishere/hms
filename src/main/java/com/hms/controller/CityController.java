@@ -47,7 +47,7 @@ public class CityController {
             @PathVariable Long id,
             @RequestBody CityDto cityDto
     ){
-        cityService.updateCity(id, cityDto)
+        CityDto updatedCity = cityService.updateCity(id, cityDto);
         return new ResponseEntity<>(updatedCity,HttpStatus.OK);
     }
 
