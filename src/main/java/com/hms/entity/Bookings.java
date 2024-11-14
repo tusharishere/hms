@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @Entity
@@ -14,34 +16,34 @@ public class Bookings {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "customer_name", nullable = false)
-    private String customerName;
+    @Column(name = "guest_name", nullable = false)
+    private String guestName;
 
-    @Column(name = "property_name", nullable = false)
-    private String propertyName;
+    @Column(name = "check_in", nullable = false)
+    private LocalDate checkInDate;
 
-    @Column(name = "check_in",nullable = false)
-    private String checkInDate;
+    @Column(name = "check_out", nullable = false)
+    private LocalDate checkOutDate;
 
-    @Column(name = "check_out",nullable = false)
-    private String checkOutDate;
+    @Column(name = "mobile", nullable = false, length = 10)
+    private String mobile;
 
-    @Column(name = "total_price",nullable = false)
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    @Column(name = "room_type", nullable = false)
+    private String roomType;
+
+    @Column(name = "total_price", nullable = false)
     private Double totalPrice;
 
-    @Column(name = "booking_status",nullable = false)
-    private String bookingStatus;
-
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "property_id")
     private Property property;
 
-    @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "review_id")
-    private Review review;
 
 }
