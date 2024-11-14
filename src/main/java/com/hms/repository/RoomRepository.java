@@ -1,4 +1,7 @@
 package com.hms.repository;
 
-public interface RoomRepository extends org.springframework.data.jpa.repository.JpaRepository<com.hms.entity.Room, java.lang.Long> {
-  }
+import com.hms.entity.Room;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface RoomRepository extends JpaRepository<Room, Long> {
+}
