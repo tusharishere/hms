@@ -1,43 +1,23 @@
 package com.hms.service;
 
-import com.hms.entity.Bookings;
 import com.hms.repository.BookingsRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.LocalDate;
+
 
 @Service
 public class BookingService {
-
     private BookingsRepository bookingsRepository;
 
     public BookingService(BookingsRepository bookingsRepository) {
         this.bookingsRepository = bookingsRepository;
     }
 
-
-    public Bookings saveBooking(Bookings booking) {
-        return bookingsRepository.save(booking);
-    }
-
-
-    public Bookings updateBooking(Long id, Bookings booking) {
-        booking.setId(id);
-        return bookingsRepository.save(booking);
-    }
-
-
-    public void deleteBooking(Long id) {
-        bookingsRepository.deleteById(id);
-    }
-
-
-    public Bookings getBookingById(Long id) {
-        return bookingsRepository.findById(id).orElse(null);
-    }
-
-
-    public List<Bookings> getAllBookings() {
-        return bookingsRepository.findAll();
+    @Transactional
+    public boolean checkRoomAvailability(long propertyId, String roomType, LocalDate checkInDate, LocalDate checkOutDate) {
+        boolean isRoomAvailable = bookingsRepository.findBookingsByPropertyIdAndDateRange(propertyId,roomType ,checkInDate, checkOutDate).isEmpty();
+        return isRoomAvailable;
     }
 }
