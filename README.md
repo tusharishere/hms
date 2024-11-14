@@ -23,8 +23,8 @@ A Hotel Management System built using Java Spring Boot.
 ## ER Diagram
 
 
-Here is the ER Diagram for the project:
-[E-R Diagram](https://github.com/user-attachments/assets/cafbee68-1465-4768-baff-ed8e1b371630)
+Here is the ER Diagram for the project:![E-R Diagram](https://github.com/user-attachments/assets/94263678-993c-4a76-bee1-692767e42565)
+
 
 
 ## Installation
