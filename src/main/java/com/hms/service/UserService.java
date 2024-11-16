@@ -9,7 +9,6 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,7 +17,7 @@ public class UserService {
     private  AppUserRepository appUserRepository;
     private ModelMapper modelMapper;
 
-    public UserService(AppUserRepository appUserRepository, ModelMapper modelMapper) {
+    public UserService() {
         this.appUserRepository = appUserRepository;
         this.modelMapper = modelMapper;
     }
