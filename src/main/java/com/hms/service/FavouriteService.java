@@ -36,6 +36,6 @@ public class FavouriteService {
     }
 
     public List<Favourite> getAllFavourites(AppUser user) {
-        return favouriteRepository.fetchByUsername(user);
+        return favouriteRepository.findByUser(user);
     }
 }

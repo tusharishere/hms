@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface FavouriteRepository extends JpaRepository<Favourite, Long> {
-    @Query("select f from Favourite f where f.appUser=:user")
-    List<Favourite> fetchByUsername(@Param("user") AppUser user);
+    @Query("select f from Favourite f where f.user=:user")
+    List<Favourite> findByUser(@Param("user") AppUser user);
+
 }
