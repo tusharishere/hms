@@ -15,7 +15,7 @@ public class Room {
     private Long id;
 
     @Column(name = "room_type", nullable = false)
-    private Integer roomType;
+    private String roomType;
 
     @Column(name = "price", nullable = false)
     private Double price;

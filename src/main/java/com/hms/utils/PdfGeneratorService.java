@@ -1,6 +1,6 @@
 package com.hms.utils;
 
-import com.hms.entity.Property;
+import com.hms.payload.BookingDto;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import org.springframework.stereotype.Service;
@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
+
 
 @Service
 public class PdfGeneratorService {
 
-    public void generateBookingPdf(String filePath, Property property) throws IOException, DocumentException, URISyntaxException {
+    public boolean generateBookingPdf(String filePath, BookingDto bookingDto) throws IOException, DocumentException{
         File file = new File(filePath);
 
         // Generate the PDF
@@ -25,12 +25,13 @@ public class PdfGeneratorService {
         addHeader(document);
 
         PdfPTable table = new PdfPTable(2); // Set to 2 columns: one for header, one for value
-        addRows(table, property);
+        addRows(table, bookingDto);
         document.add(table);
 
         addFooter(writer);
 
         document.close();
+        return file.exists();
     }
 
     private void addHeader(Document document) throws DocumentException {
@@ -50,12 +51,16 @@ public class PdfGeneratorService {
         });
     }
 
-    private void addRows(PdfPTable table, Property property) {
+    private void addRows(PdfPTable table, BookingDto bookingDto) {
         // Create each row with a header (left column) and value (right column)
-        addRow(table, "Id", String.valueOf(property.getId()));
-        addRow(table, "Name", property.getPropertyName());
-        addRow(table, "No of Guests", String.valueOf(property.getNo_of_guest()));
-        // Add other attributes as needed
+        addRow(table, "Booking ID", String.valueOf(bookingDto.getId()));
+        addRow(table, "Guest Name", bookingDto.getGuestName());
+        addRow(table, "Total Nights", String.valueOf(bookingDto.getTotalNights()));
+        addRow(table, "Mobile", bookingDto.getMobile());
+        addRow(table, "Email", bookingDto.getEmail());
+        addRow(table, "Room Type", bookingDto.getRoomType());
+        addRow(table, "Total Price", String.valueOf(bookingDto.getTotalPrice()));
+        addRow(table, "Property Name", bookingDto.getPropertyName());
     }
 
     private void addRow(PdfPTable table, String header, String value) {

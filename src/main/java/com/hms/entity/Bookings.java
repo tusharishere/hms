@@ -19,11 +19,14 @@ public class Bookings {
     @Column(name = "guest_name", nullable = false)
     private String guestName;
 
-    @Column(name = "check_in", nullable = false)
-    private LocalDate checkInDate;
+//    @Column(name = "check_in", nullable = false)
+//    private LocalDate checkInDate;
+//
+//    @Column(name = "check_out", nullable = false)
+//    private LocalDate checkOutDate;
 
-    @Column(name = "check_out", nullable = false)
-    private LocalDate checkOutDate;
+    @Column(name = "total_nights", nullable = false)
+    private Double totalNights;
 
     @Column(name = "mobile", nullable = false, length = 10)
     private String mobile;

@@ -30,6 +30,13 @@ public class Property {
     @Column(name = "no_of_beds", nullable = false)
     private Integer no_of_beds;
 
+    @Column(name = "nightly_price", nullable = false)
+    private Integer nightlyPrice;
+
+    @Column(name = "available_rooms", nullable = false)
+    private Integer availableRooms;
+
+
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "country_id")
     private Country country;
@@ -38,5 +45,7 @@ public class Property {
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "city_id")
     private City city;
+
+
 
 }

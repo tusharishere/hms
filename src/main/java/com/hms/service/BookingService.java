@@ -14,10 +14,4 @@ public class BookingService {
     public BookingService(BookingsRepository bookingsRepository) {
         this.bookingsRepository = bookingsRepository;
     }
-
-    @Transactional
-    public boolean checkRoomAvailability(long propertyId, String roomType, LocalDate checkInDate, LocalDate checkOutDate) {
-        boolean isRoomAvailable = bookingsRepository.findBookingsByPropertyIdAndDateRange(propertyId,roomType ,checkInDate, checkOutDate).isEmpty();
-        return isRoomAvailable;
-    }
 }
