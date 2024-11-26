@@ -1,17 +1,18 @@
 package com.hms.payload;
 
+import com.hms.entity.Property;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
 public class BookingDto {
-    private Long id;
     private String guestName;
-    private Double totalNights;
-    private String mobile;
     private String email;
-    private String roomType;
-    private Double totalPrice;
-    private String propertyName;
+    private String mobile;
+    private LocalDate checkInDate;
+    private LocalDate checkOutDate;
+    private Property property;
 }

@@ -19,23 +19,18 @@ public class Bookings {
     @Column(name = "guest_name", nullable = false)
     private String guestName;
 
-//    @Column(name = "check_in", nullable = false)
-//    private LocalDate checkInDate;
-//
-//    @Column(name = "check_out", nullable = false)
-//    private LocalDate checkOutDate;
+    @Column(name = "check_in", nullable = false)
+    private LocalDate checkInDate;
 
-    @Column(name = "total_nights", nullable = false)
-    private Double totalNights;
+    @Column(name = "check_out", nullable = false)
+    private LocalDate checkOutDate;
 
-    @Column(name = "mobile", nullable = false, length = 10)
-    private String mobile;
 
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "room_type", nullable = false)
-    private String roomType;
+    @Column(name = "mobile", nullable = false, length = 10)
+    private String mobile;
 
     @Column(name = "total_price", nullable = false)
     private Double totalPrice;

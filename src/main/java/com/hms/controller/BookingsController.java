@@ -4,8 +4,12 @@ package com.hms.controller;
 import com.hms.entity.AppUser;
 import com.hms.entity.Bookings;
 import com.hms.entity.Property;
+import com.hms.entity.Room;
+import com.hms.exception.ResourceNotFoundException;
 import com.hms.payload.BookingDto;
 import com.hms.repository.BookingsRepository;
+import com.hms.repository.RoomRepository;
+import com.hms.utils.WhatsAppService;
 import org.springframework.core.io.ByteArrayResource;
 import com.hms.repository.PropertyRepository;
 import com.hms.service.BucketService;
@@ -21,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Optional;
+import java.util.List;
 import java.io.InputStream;
 
 @RestController
@@ -31,59 +35,64 @@ public class BookingsController {
     private PdfGeneratorService pdfGeneratorService;
     private PropertyRepository propertyRepository;
     private BookingsRepository bookingsRepository;
+    private RoomRepository roomRepository;
     private SmsService smsService;
+    private WhatsAppService whatsAppService;
     private BucketService bucketService;
 
-    public BookingsController(PdfGeneratorService pdfGeneratorService, PropertyRepository propertyRepository, BookingsRepository bookingsRepository, SmsService smsService, BucketService bucketService) {
+    public BookingsController(PdfGeneratorService pdfGeneratorService, PropertyRepository propertyRepository, BookingsRepository bookingsRepository, RoomRepository roomRepository, SmsService smsService, WhatsAppService whatsAppService, BucketService bucketService) {
         this.pdfGeneratorService = pdfGeneratorService;
         this.propertyRepository = propertyRepository;
         this.bookingsRepository = bookingsRepository;
+        this.roomRepository = roomRepository;
         this.smsService = smsService;
+        this.whatsAppService = whatsAppService;
         this.bucketService = bucketService;
     }
     @PostMapping("/create-booking/{propertyId}")
     public ResponseEntity<?> createBooking(
             @PathVariable long propertyId,
+            @RequestParam String roomType,
             @AuthenticationPrincipal AppUser user,
             @RequestBody Bookings bookings) throws DocumentException, IOException{
         {
-            bookings.setAppUser(user);
-            Optional<Property> byId = propertyRepository.findById(propertyId);
-            if (byId.isEmpty()) {
-                return new ResponseEntity<>("Property not found", HttpStatus.NOT_FOUND);
+            Property property = propertyRepository.findById(propertyId).orElseThrow(
+                ()-> new ResourceNotFoundException("Property not found")
+            );
+            List<Room> rooms = roomRepository.findRoomsByTypeAndProperty(bookings.getCheckInDate(), bookings.getCheckOutDate(), roomType, property);
+            for (Room room : rooms) {
+                if (room.getAvailableCount() == 0) {
+                    return new ResponseEntity<>("No Rooms available for " + room.getDate(), HttpStatus.INTERNAL_SERVER_ERROR);
+                }
             }
-            Property property = byId.get();
-            int propertyPrice = property.getNightlyPrice();
-            Double totalNights = bookings.getTotalNights();
 
-            // Calculate the total price for the booking
-            Double totalPrice = propertyPrice * totalNights;
+//            for(Room room : rooms) {
+//                double totalPrice =  room.getNightlyPrice()*(double)(rooms.size()-1)*1.18;
+//            }
+
             bookings.setProperty(property);
-            bookings.setTotalPrice( totalPrice);
-
-            if (property.getAvailableRooms() <= 0) {
-                return new ResponseEntity<>("No rooms available for the selected dates", HttpStatus.BAD_REQUEST);
-            }
-            property.setAvailableRooms(property.getAvailableRooms() - 1);
+            bookings.setAppUser(user);
             Bookings savedBooking = bookingsRepository.save(bookings);
-            propertyRepository.save(property);
+            if (savedBooking != null) {
+                for (Room rm : rooms) {
+                    rm.setAvailableCount(rm.getAvailableCount()-1);
+                    roomRepository.save(rm);
+                }
+            }
+
 
             // Create BookingDto to pass data to PDF generator
 
             BookingDto bookingDto = new BookingDto();
-            bookingDto.setId(savedBooking.getId());
             bookingDto.setEmail(savedBooking.getEmail());
             bookingDto.setGuestName(savedBooking.getGuestName());
-            bookingDto.setMobile(savedBooking.getMobile());
-            bookingDto.setRoomType(savedBooking.getRoomType());
-            bookingDto.setTotalNights(savedBooking.getTotalNights());
-            bookingDto.setTotalPrice(savedBooking.getTotalPrice());
-            bookingDto.setPropertyName(property.getPropertyName());
+
             boolean pdfGenerated = pdfGeneratorService.generateBookingPdf("D:\\hms_Bookings\\Confirmation-Order "+savedBooking.getId()+".pdf",bookingDto);
             if (pdfGenerated) {
                 MultipartFile file = convert("D://hms_Bookings//Confirmation-Order-" + savedBooking.getId() + ".pdf");
                 String uploadedFileUrl = bucketService.uploadFile(file, "hotelmgmthms");
                 smsService.sendSms(bookings.getMobile(), "Your booking is confirmed. Click for more information: " + uploadedFileUrl);
+                whatsAppService.sendWhatsAppMessage(bookings.getMobile(), "Your booking is confirmed. Your booking id is: " + bookings.getId());
             } else {
                 return new ResponseEntity<>("Error generating PDF", HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -123,7 +132,7 @@ public class BookingsController {
             }
 
             @Override
-            public byte[] getBytes() throws IOException {
+            public byte[] getBytes()  {
                 return fileContent;
             }
 

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @Entity
@@ -17,11 +19,14 @@ public class Room {
     @Column(name = "room_type", nullable = false)
     private String roomType;
 
-    @Column(name = "price", nullable = false)
-    private Double price;
+    @Column(name = "per_night_price", nullable = false)
+    private Double nightlyPrice;
 
     @Column(name = "available_Count", nullable = false)
-    private String availableCount;
+    private Integer availableCount;
+
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "property_id")
