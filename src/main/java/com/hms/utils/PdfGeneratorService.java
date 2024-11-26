@@ -53,14 +53,9 @@ public class PdfGeneratorService {
 
     private void addRows(PdfPTable table, BookingDto bookingDto) {
         // Create each row with a header (left column) and value (right column)
-        addRow(table, "Booking ID", String.valueOf(bookingDto.getId()));
         addRow(table, "Guest Name", bookingDto.getGuestName());
-        addRow(table, "Total Nights", String.valueOf(bookingDto.getTotalNights()));
         addRow(table, "Mobile", bookingDto.getMobile());
         addRow(table, "Email", bookingDto.getEmail());
-        addRow(table, "Room Type", bookingDto.getRoomType());
-        addRow(table, "Total Price", String.valueOf(bookingDto.getTotalPrice()));
-        addRow(table, "Property Name", bookingDto.getPropertyName());
     }
 
     private void addRow(PdfPTable table, String header, String value) {
